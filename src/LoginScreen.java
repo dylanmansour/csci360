@@ -1,4 +1,5 @@
-/*
+/**
+ * Justin Priester, Dylan Mansour
  * The screen where the voter can either log into an account or opt to register
  * for one (switch to the register screen).
  */

@@ -1,4 +1,5 @@
-/*
+/**
+ * Justin Priester, Dylan Mansour
  * The screen where the voter can register for an account.
  */
 public class RegisterScreen {

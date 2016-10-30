@@ -1,4 +1,5 @@
-/*
+/**
+ * Justin Priester, Dylan Mansour
  * The primary controller of the voting software. It is responsible for
  * responding to input from the view classes.
  */

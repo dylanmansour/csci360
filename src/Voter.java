@@ -1,4 +1,5 @@
-/*
+/**
+ * Justin Priester, Dylan Mansour
  * Represents the voter and his interactions with the software.
  */
 public class Voter {

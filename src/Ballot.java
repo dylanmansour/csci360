@@ -1,4 +1,5 @@
-/*
+/**
+ * Justin Priester, Dylan Mansour
  * An assumed virtual slip containing voting information
  */
 public class Ballot {

@@ -1,4 +1,5 @@
-/*
+/**
+ * Justin Priester, Dylan Mansour
  * A wrapper class that handles connections with the database that contains
  * information on accounts and votes.
  */

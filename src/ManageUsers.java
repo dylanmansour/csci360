@@ -1,4 +1,5 @@
-/*
+/**
+ * Justin Priester, Dylan Mansour
  * A secondary controller that contains methods for managing profile information.
  */
 public class ManageUsers {

@@ -1,4 +1,5 @@
-/*
+/**
+ * Justin Priester, Dylan Mansour
  * Information holder for a profile.
  */
 public class VoterProfile {

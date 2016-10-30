@@ -1,4 +1,5 @@
-/*
+/**
+ * Justin Priester, Dylan Mansour
  * The screen where the voter can view candidate information and submit a vote.
  */
 public class VoteScreen {

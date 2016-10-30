@@ -1,4 +1,5 @@
-/*
+/**
+ * Justin Priester, Dylan Mansour
  * A wrapper class for the printer that the software is connected to.
  */
 public class Printer {
