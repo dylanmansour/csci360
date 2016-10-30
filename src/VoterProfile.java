@@ -1,7 +1,10 @@
-
+/*
+ * Information holder for a profile.
+ */
 public class VoterProfile {
-	boolean registered;
-	String name;
-	String voterID;
-	int age;
+	boolean registered; // whether or not the profile is officially registered
+	String name; // name of the profile
+	String voterID; // generated ID of the voter who owns the profile
+	int age; // age of the voter who owns the profile
+	String licenseID; // driver's license ID of the voter who owns the profile (encrypted)
 }
