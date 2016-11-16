@@ -4,6 +4,26 @@
  */
 public class Candidate {
 	
-	String name; // name of the candidate
-	String party; // party the candidate is associated with
+	private String name; // name of the candidate
+	private String party; // party the candidate is associated with
+	
+	public String getName()
+	{
+		return name;
+	}
+	
+	public String getParty()
+	{
+		return party;
+	}
+	
+	public void setName(String name)
+	{
+		this.name = name;
+	}
+	
+	public void setParty(String party)
+	{
+		this.party = party;
+	}
 }

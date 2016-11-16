@@ -2,15 +2,15 @@
  * Justin Priester, Dylan Mansour
  * A secondary controller that contains methods for managing voter information.
  */
-public class ManageVotes {
+public final class ManageVotes {
 	
-	Database database; // stores persistent data (vote and account info)
+	private static Database database; // stores persistent data (vote and account info)
 	
 	/*
 	 * Returns the number of votes from the database that match the name of
 	 * the specified candidate.
 	 */
-	int countVotes(Candidate candidate)
+	public static int countVotes(Candidate candidate)
 	{
 		// TODO
 		return 0;
