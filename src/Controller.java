@@ -10,66 +10,126 @@ public class Controller {
 	{
 		Scanner scanner = new Scanner(System.in); //hold, will read user input
 		
-		String input; //used for storing input
+		String nextMenu = "mainMenu"; //the next menu to go to after the current one terminates
 		
+		//sample candidate
 		Candidate bob = new Candidate();
 		bob.setName("Bob");
 		bob.setParty("Builder");
 		
+		//sample candidate
 		Candidate bill = new Candidate();
 		bill.setName("Bill");
 		bill.setParty("Science");
+		
+		while (!nextMenu.equals("exit"))
+		{
+			switch (nextMenu)
+			{
+			case "mainMenu":
+				nextMenu = simulateMainMenu(scanner);
+				break;
+				
+			case "registerMenu":
+				nextMenu = simulateRegisterMenu(scanner);
+				break;
+				
+			case "loginMenu":
+				nextMenu = simulateLoginMenu(scanner);
+				break;
+			}
+		}
+		
+		scanner.close();
+	}
+	
+	private static String simulateMainMenu(Scanner scanner)
+	{
+		String nextMenu = ""; //to contain information on which menu to go to after this one ends
 		
 		System.out.println("Welcome to the bestest voting system evar!");
 		System.out.println("Type 'register' if you want to register,\n" +
 								"or type 'login' if you already have an account.");
 		
-		input = scanner.nextLine();
+		String input = scanner.nextLine();
 		
 		if (input.equals("register"))
 		{
-			System.out.println("Hurrayz! Let's get some information from you!");
-			
-			//Registration
-			System.out.println("Remember that none of your information should have spaces.");
-			System.out.println("Also, you have to be 18 or older in order to vote.");
-			
-			System.out.print("Username (for logging in): ");
-			String name = scanner.nextLine();
-			
-			System.out.print("Password (for logging in): ");
-			String password = scanner.nextLine();
-			
-			System.out.println("Death Certificate: ");
-			System.out.println("...I mean...");
-			System.out.print("Age: ");
-			int age = scanner.nextInt();
-			scanner.nextLine();
-			
-			System.out.print("Driver's License ID: ");
-			String licenseID = scanner.nextLine();
-			
-			if (ManageUsers.verifyRegistration(name, password, age, licenseID))
-			{
-				ManageUsers.registerAccount(name, password, age, licenseID);
-				
-				System.out.println("Your account has been registered!");
-				System.out.println("We totally won't do anything evil with this information! =D");
-			}
-			else
-			{
-				System.out.println("Uh oh! You submitted invalid information!");
-			}
+			nextMenu = "registerScreen";
 		}
 		else if (input.equals("login"))
 		{
-			//Logging In
+			nextMenu = "loginScreen";
 		}
 		else
 		{
 			System.out.println("Uh oh! You submitted invalid information!");
+			nextMenu = "mainMenu";
 		}
 		
-		scanner.close();
+		return nextMenu;
+	}
+	
+	private static String simulateRegisterMenu(Scanner scanner)
+	{
+		String nextMenu = ""; //to contain information on which menu to go to after this one ends
+		VoterProfile newProfile; //to hold information of the new profile
+		
+		System.out.println("Hurrayz! Let's get some information from you!");
+		
+		//Registration
+		System.out.println("Remember that none of your information should have spaces.");
+		System.out.println("Also, you have to be 18 or older in order to vote.");
+		
+		System.out.print("Username (for logging in): ");
+		String username = scanner.nextLine();
+		
+		System.out.print("Password (for logging in): ");
+		String password = scanner.nextLine();
+		
+		System.out.println("Death Certificate: ");
+		System.out.println("...I mean...");
+		System.out.print("Age: ");
+		int age = scanner.nextInt();
+		scanner.nextLine();
+		
+		System.out.print("Driver's License ID: ");
+		String licenseID = scanner.nextLine();
+		
+		newProfile = new VoterProfile(username, password, age, licenseID);
+		
+		if (ManageUsers.verifyRegistration(newProfile))
+		{
+			ManageUsers.registerAccount(newProfile);
+			
+			if (newProfile.isRegistered())
+			{
+				System.out.println("Your account has been registered!");
+				System.out.println("We totally won't do anything evil with this information! =D");
+				
+				nextMenu = "loginMenu";
+			}
+			else
+			{
+				System.out.println("For some reason we couldn't register your account. =(");
+			}
+		}
+		else
+		{
+			System.out.println("Uh oh! You submitted invalid information!");
+			nextMenu = "registerMenu";
+		}
+		
+		return nextMenu;
+	}
+	
+	private static String simulateLoginMenu(Scanner scanner)
+	{
+		return "exit";
+	}
+	
+	private static String simulateVoteMenu(Scanner scanner, VoterProfile profile)
+	{
+		return "exit";
 	}
 }
