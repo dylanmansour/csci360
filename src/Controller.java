@@ -1,3 +1,4 @@
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -61,7 +62,7 @@ public class Controller {
 		return nextMenu;
 	}
 	
-	private static String simulateRegisterMenu(Scanner scanner)
+	private static String simulateRegisterMenu(Scanner scanner) throws IOException
 	{
 		String nextMenu = ""; //to contain information on which menu to go to after this one ends
 		VoterProfile newProfile; //to hold information of the new profile

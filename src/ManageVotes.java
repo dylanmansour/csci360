@@ -1,3 +1,7 @@
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.util.Scanner;
+
 /**
  * Justin Priester, Dylan Mansour
  * A secondary controller that contains methods for managing voter information.
@@ -14,12 +18,12 @@ public final class ManageVotes {
 	* Returns the number of votes from the database that match the name of
 	* the specified candidate.
 	*/
-	public static int countVotes(Candidate candidate)
+	public static int countVotes(Candidate candidate) throws FileNotFoundException
 	{
 		String name = candidate.getName();
 		int voteCount = 0;
 		
-		Scanner scanner = new Scanner(new FileInputStream(this.database));
+		Scanner scanner = new Scanner(new FileInputStream(database));
 		String str = null;
 
 		while(scanner.hasNextLine())
