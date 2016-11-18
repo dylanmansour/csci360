@@ -15,8 +15,10 @@ public final class ManageUsers {
 	 * Checks if the specified name and password match the name and password
 	 * of a profile stored in the database.
 	 */
-	public static boolean verifyLogin(String username, String password)
+	public static VoterProfile login(String username, String password)
 	 {
+		VoterProfile profile = null;
+		
 		/*Scanner scanner = new Scanner(new FileInputStream("users.txt"));
 		String str = null;
 
@@ -30,7 +32,7 @@ public final class ManageUsers {
 			}
 		}
 		scanner.close();*/
-		return false;
+		return profile;
 	 }
 	
 	/**

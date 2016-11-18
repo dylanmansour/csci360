@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.Scanner;
 
 /**
@@ -11,16 +12,6 @@ public class Controller {
 		Scanner scanner = new Scanner(System.in); //hold, will read user input
 		
 		String nextMenu = "mainMenu"; //the next menu to go to after the current one terminates
-		
-		//sample candidate
-		Candidate bob = new Candidate();
-		bob.setName("Bob");
-		bob.setParty("Builder");
-		
-		//sample candidate
-		Candidate bill = new Candidate();
-		bill.setName("Bill");
-		bill.setParty("Science");
 		
 		while (!nextMenu.equals("exit"))
 		{
@@ -63,7 +54,7 @@ public class Controller {
 		}
 		else
 		{
-			System.out.println("Uh oh! You submitted invalid information!");
+			System.out.println("You submitted invalid information!");
 			nextMenu = "mainMenu";
 		}
 		
@@ -75,7 +66,7 @@ public class Controller {
 		String nextMenu = ""; //to contain information on which menu to go to after this one ends
 		VoterProfile newProfile; //to hold information of the new profile
 		
-		System.out.println("Hurrayz! Let's get some information from you!");
+		System.out.println("Let's get some information from you.");
 		
 		//Registration
 		System.out.println("Remember that none of your information should have spaces.");
@@ -87,8 +78,6 @@ public class Controller {
 		System.out.print("Password (for logging in): ");
 		String password = scanner.nextLine();
 		
-		System.out.println("Death Certificate: ");
-		System.out.println("...I mean...");
 		System.out.print("Age: ");
 		int age = scanner.nextInt();
 		scanner.nextLine();
@@ -111,7 +100,7 @@ public class Controller {
 			}
 			else
 			{
-				System.out.println("For some reason we couldn't register your account. =(");
+				System.out.println("For some reason we couldn't register your account.");
 			}
 		}
 		else
@@ -125,11 +114,49 @@ public class Controller {
 	
 	private static String simulateLoginMenu(Scanner scanner)
 	{
-		return "exit";
+		String nextMenu = ""; //to contain information on which menu to go to after this one ends
+		
+		System.out.print("Username: ");
+		String username = scanner.nextLine();
+		
+		System.out.print("Password: ");
+		String password = scanner.nextLine();
+		
+		VoterProfile profile = ManageUsers.login(username, password);
+		
+		if (profile != null)
+		{
+			while (nextMenu != "logout")
+			{
+				nextMenu = simulateVoteMenu(scanner, profile);
+			}
+		}
+		else
+		{
+			System.out.println("The specified account does not exist.");
+		}
+		
+		return nextMenu;
 	}
 	
 	private static String simulateVoteMenu(Scanner scanner, VoterProfile profile)
 	{
-		return "exit";
+		String nextMenu = ""; //to contain information on which menu to go to after this one ends
+		
+		//sample candidate
+		Candidate bob = new Candidate();
+		bob.setName("Bob");
+		bob.setParty("Builder");
+		
+		//sample candidate
+		Candidate bill = new Candidate();
+		bill.setName("Bill");
+		bill.setParty("Science");
+		
+		ArrayList<Candidate> candidates = new ArrayList<Candidate>();
+		
+		System.out.println("You have the candidates that you can vote for.");
+		
+		return nextMenu;
 	}
 }
