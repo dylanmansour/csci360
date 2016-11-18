@@ -4,15 +4,35 @@
  */
 public final class ManageVotes {
 	
-	private static Database database; // stores persistent data (vote and account info)
+	private static String database; // stores persistent data (vote and account info)
 	
+	public ManageVotes(String filename)
+	{
+	   database = filename;
+	}
 	/*
-	 * Returns the number of votes from the database that match the name of
-	 * the specified candidate.
-	 */
+	* Returns the number of votes from the database that match the name of
+	* the specified candidate.
+	*/
 	public static int countVotes(Candidate candidate)
 	{
-		// TODO
-		return 0;
+		String name = candidate.getName();
+		int voteCount = 0;
+		
+		Scanner scanner = new Scanner(new FileInputStream(this.database));
+		String str = null;
+
+		while(scanner.hasNextLine())
+		{
+			str = scanner.nextLine();
+			String[] fields = str.split(";");
+			if (fields[0].equals(name))
+			{
+				voteCount = voteCount + 1;
+			}
+		}
+		scanner.close();
+		
+		return voteCount;
 	}
 }
