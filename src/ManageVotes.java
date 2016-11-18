@@ -14,7 +14,8 @@ public final class ManageVotes {
 	{
 	   database = filename;
 	}
-	/*
+	
+	/**
 	* Returns the number of votes from the database that match the name of
 	* the specified candidate.
 	*/

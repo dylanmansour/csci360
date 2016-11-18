@@ -23,9 +23,9 @@ public final class ManageUsers {
 	* of a profile stored in the database.
 	 * @throws FileNotFoundException 
 	*/
-	public static boolean verifyLogin(String username, String password) throws FileNotFoundException
+	public static VoterProfile login(String username, String password) throws FileNotFoundException
 	{
-		boolean result = false;
+		VoterProfile profile = null;
 		Scanner scanner = new Scanner(new FileInputStream("users.txt"));
 		String str = null;
 
@@ -35,12 +35,13 @@ public final class ManageUsers {
 			String[] fields = str.split(";");
 			if (fields[0].equals(username) && fields[1].equals(password))
 			{
-				result = true;
+				profile = new VoterProfile(fields[0], fields[1], Integer.parseInt(fields[3]), fields[4]);
+				profile.setVoterID(fields[2]);
 				break;
 			}
 		}
 		scanner.close();
-		return result;
+		return profile;
 	}
 	
 	/**

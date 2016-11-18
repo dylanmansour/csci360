@@ -1,4 +1,10 @@
-/*/**
+import java.io.BufferedWriter;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.io.Writer;
+
+/**
  * Justin Priester, Dylan Mansour
  * An assumed virtual slip containing voting information
  */
@@ -14,18 +20,22 @@ public class Ballot {
 	    database = filename;
 	    vote = v;
 	}
-	/*
+	/**
 	 * Submits the held voting information to the database.
 	 */
-	void castVote()
+	void castVote() throws IOException
 	{
-		Writer writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(this.database),"utf-8"))
-		try{
-		    writer.append(this.vote.getName() + ";" + this.vote.getID() + "\n");
-		   }
+		Writer writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(this.database),"utf-8"));
+		writer.append(this.vote.getName() + ";" + this.vote.getID() + "\n");
+		writer.close();
 	}
 	
-	/*
+	boolean voteCasted()
+	{
+		return false;
+	}
+	
+	/**
 	 * Assigns a vote to the ballot.
 	 */
 	void setVote(Vote v)
@@ -33,11 +43,12 @@ public class Ballot {
 		vote = v;
 	}
 	
-	/*
+	/**
 	 * Calls on the printer to print the held voting information
 	 */
 	void printResult()
 	{
+		//TODO Will be updated to properly print from a physical printer later.
 		System.out.println(this.vote.getName() + "  " + this.vote.getID());
 	}
 }
