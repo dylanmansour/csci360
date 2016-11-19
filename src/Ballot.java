@@ -1,8 +1,11 @@
 import java.io.BufferedWriter;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
+import java.util.Scanner;
 
 /**
  * Justin Priester, Dylan Mansour
@@ -23,22 +26,38 @@ public class Ballot {
 	/**
 	 * Submits the held voting information to the database.
 	 */
-	void castVote() throws IOException
+	public void castVote() throws IOException
 	{
 		Writer writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(this.database),"utf-8"));
 		writer.append(this.vote.getName() + ";" + this.vote.getID() + "\n");
 		writer.close();
 	}
 	
-	boolean voteCasted()
+	public boolean voteCasted() throws FileNotFoundException
 	{
-		return false;
+		boolean voteCast = false;
+		
+		Scanner scanner = new Scanner(new FileInputStream(this.database));
+		String str = null;
+
+		while(scanner.hasNextLine())
+		{
+			str = scanner.nextLine();
+			String[] fields = str.split(";");
+			if (fields[1].equals(this.vote.getID()))
+			{
+				voteCast = true;
+				break;
+			}
+		}
+		scanner.close();
+		return voteCast;
 	}
 	
 	/**
 	 * Assigns a vote to the ballot.
 	 */
-	void setVote(Vote v)
+	public void setVote(Vote v)
 	{
 		vote = v;
 	}
@@ -46,7 +65,7 @@ public class Ballot {
 	/**
 	 * Calls on the printer to print the held voting information
 	 */
-	void printResult()
+	public void printResult()
 	{
 		//TODO Will be updated to properly print from a physical printer later.
 		System.out.println(this.vote.getName() + "  " + this.vote.getID());

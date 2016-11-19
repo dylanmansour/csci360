@@ -10,12 +10,13 @@ import java.util.Scanner;
 public class Controller {
 	public static void main(String[] args) throws IOException
 	{
-		ManageUsers manageUsers = new ManageUsers("users.txt");
+		ManageUsers manageUsers = new ManageUsers("users.txt"); //Extended methods for managing user profiles
 		
 		Scanner scanner = new Scanner(System.in); //hold, will read user input
 		
 		String nextMenu = "mainMenu"; //the next menu to go to after the current one terminates
 		
+		//Start the console menu
 		while (!nextMenu.equals("exit"))
 		{
 			switch (nextMenu)
@@ -37,6 +38,11 @@ public class Controller {
 		scanner.close();
 	}
 	
+	/**
+	 * Simulates a main menu in the console.
+	 * @param scanner
+	 * @return
+	 */
 	private static String simulateMainMenu(Scanner scanner)
 	{
 		String nextMenu = ""; //to contain information on which menu to go to after this one ends
@@ -69,6 +75,13 @@ public class Controller {
 		return nextMenu;
 	}
 	
+	/**
+	 * Simulates a register menu in the console.
+	 * @param scanner
+	 * @param manageUsers
+	 * @return the next menu to go to
+	 * @throws IOException
+	 */
 	private static String simulateRegisterMenu(Scanner scanner, ManageUsers manageUsers) throws IOException
 	{
 		String nextMenu = ""; //to contain information on which menu to go to after this one ends
@@ -79,8 +92,10 @@ public class Controller {
 		//Registration
 		System.out.println("Remember that none of your information should have spaces.");
 		System.out.println("Also, you have to be 18 or older in order to vote.");
+		System.out.println("And it will fail if you already have an account.regi");
 		System.out.println("Type 'exit' at the start to back out of registration.");
 		
+		//Ask for username
 		System.out.print("Username (for logging in): ");
 		String username = scanner.nextLine();
 		if (username.equals("exit"))
@@ -88,13 +103,16 @@ public class Controller {
 			return "mainMenu";
 		}
 		
+		//Ask for password
 		System.out.print("Password (for logging in): ");
 		String password = scanner.nextLine();
 		
+		//Ask for age
 		System.out.print("Age: ");
 		int age = scanner.nextInt();
 		scanner.nextLine();
 		
+		//Ask for license
 		System.out.print("Driver's License ID: ");
 		String licenseID = scanner.nextLine();
 		
@@ -125,15 +143,35 @@ public class Controller {
 		return nextMenu;
 	}
 	
+	/**
+	 * Simulates a main menu in the console.
+	 * @param scanner
+	 * @param manageUsers
+	 * @return the next menu to go to
+	 * @throws IOException
+	 */
 	private static String simulateLoginMenu(Scanner scanner, ManageUsers manageUsers) throws IOException
 	{
 		String nextMenu = ""; //to contain information on which menu to go to after this one ends
 		
+		System.out.println("Let's log in!");
+		System.out.println("Type 'exit' to exit out.");
+		
+		//Ask for username
 		System.out.print("Username: ");
 		String username = scanner.nextLine();
+		if (username.equals("exit"))
+		{
+			return "mainMenu";
+		}
 		
+		//Ask for password
 		System.out.print("Password: ");
 		String password = scanner.nextLine();
+		if (password.equals("exit"))
+		{
+			return "mainMenu";
+		}
 		
 		VoterProfile profile = manageUsers.login(username, password);
 		
@@ -152,10 +190,16 @@ public class Controller {
 			nextMenu = "loginMenu";
 		}
 		
-		
 		return nextMenu;
 	}
 	
+	/**
+	 * Simulates a vote menu in the console.
+	 * @param scanner
+	 * @param profile
+	 * @return the next menu to go to
+	 * @throws IOException
+	 */
 	private static String simulateVoteMenu(Scanner scanner, VoterProfile profile) throws IOException
 	{
 		String nextMenu = ""; //to contain information on which menu to go to after this one ends
@@ -171,6 +215,7 @@ public class Controller {
 		bill.setName("Bill");
 		bill.setParty("Science");
 		
+		//Add candidates to list
 		ArrayList<Candidate> candidates = new ArrayList<Candidate>();
 		candidates.add(bob);
 		candidates.add(bill);
@@ -179,6 +224,7 @@ public class Controller {
 		System.out.println("Type the name of the  candidate that you want to vote for.");
 		System.out.println("Type 'logout' to log out.");
 		
+		//List candidates
 		for (Candidate candidate : candidates)
 		{
 			System.out.println("Name: " + candidate.getName());
@@ -194,8 +240,9 @@ public class Controller {
 		}
 		else
 		{
-			int voteIndex = -1;
+			int voteIndex = -1; //hold to be index in the candidate list of who the voter voted for
 			
+			//Obtain the index in the candidate list of who the voter voted for
 			for (int i = 0; i < candidates.size(); i++)
 			{
 				if (input.equals(candidates.get(i).getName()))
@@ -212,11 +259,11 @@ public class Controller {
 			}
 			else
 			{
-				Vote vote = new Vote();
+				Vote vote = new Vote(); //The voter's vote
 				vote.setName(candidates.get(voteIndex).getName());
 				vote.setID(profile.getVoterID());
 				
-				Ballot ballot = new Ballot("votes.txt", vote);
+				Ballot ballot = new Ballot("votes.txt", vote); //A ballot that holds the vote
 				
 				if (ballot.voteCasted())
 				{
