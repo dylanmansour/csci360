@@ -16,9 +16,12 @@ public final class ManageVotes {
 	}
 	
 	/**
-	* Returns the number of votes from the database that match the name of
-	* the specified candidate.
-	*/
+	 * Returns the number of votes from the database that match the name of
+	 * the specified candidate.
+	 * @param candidate
+	 * @return
+	 * @throws FileNotFoundException
+	 */
 	public static int countVotes(Candidate candidate) throws FileNotFoundException
 	{
 		String name = candidate.getName();

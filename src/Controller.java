@@ -10,6 +10,8 @@ import java.util.Scanner;
 public class Controller {
 	public static void main(String[] args) throws IOException
 	{
+		ManageUsers manageUsers = new ManageUsers("users.txt");
+		
 		Scanner scanner = new Scanner(System.in); //hold, will read user input
 		
 		String nextMenu = "mainMenu"; //the next menu to go to after the current one terminates
@@ -23,11 +25,11 @@ public class Controller {
 				break;
 				
 			case "registerMenu":
-				nextMenu = simulateRegisterMenu(scanner);
+				nextMenu = simulateRegisterMenu(scanner, manageUsers);
 				break;
 				
 			case "loginMenu":
-				nextMenu = simulateLoginMenu(scanner);
+				nextMenu = simulateLoginMenu(scanner, manageUsers);
 				break;
 			}
 		}
@@ -48,11 +50,11 @@ public class Controller {
 		
 		if (input.equals("register"))
 		{
-			nextMenu = "registerScreen";
+			nextMenu = "registerMenu";
 		}
 		else if (input.equals("login"))
 		{
-			nextMenu = "loginScreen";
+			nextMenu = "loginMenu";
 		}
 		else if (input.equals("exit"))
 		{
@@ -67,7 +69,7 @@ public class Controller {
 		return nextMenu;
 	}
 	
-	private static String simulateRegisterMenu(Scanner scanner) throws IOException
+	private static String simulateRegisterMenu(Scanner scanner, ManageUsers manageUsers) throws IOException
 	{
 		String nextMenu = ""; //to contain information on which menu to go to after this one ends
 		VoterProfile newProfile; //to hold information of the new profile
@@ -98,9 +100,9 @@ public class Controller {
 		
 		newProfile = new VoterProfile(username, password, age, licenseID);
 		
-		if (ManageUsers.verifyRegistration(newProfile))
+		if (manageUsers.verifyRegistration(newProfile))
 		{
-			ManageUsers.registerAccount(newProfile);
+			manageUsers.registerAccount(newProfile);
 			
 			if (newProfile.isRegistered())
 			{
@@ -123,7 +125,7 @@ public class Controller {
 		return nextMenu;
 	}
 	
-	private static String simulateLoginMenu(Scanner scanner) throws IOException
+	private static String simulateLoginMenu(Scanner scanner, ManageUsers manageUsers) throws IOException
 	{
 		String nextMenu = ""; //to contain information on which menu to go to after this one ends
 		
@@ -133,7 +135,7 @@ public class Controller {
 		System.out.print("Password: ");
 		String password = scanner.nextLine();
 		
-		VoterProfile profile = ManageUsers.login(username, password);
+		VoterProfile profile = manageUsers.login(username, password);
 		
 		if (profile != null)
 		{

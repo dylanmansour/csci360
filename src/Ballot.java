@@ -10,9 +10,9 @@ import java.io.Writer;
  */
 public class Ballot {
 	
-	Vote vote; // vote that the ballot holds
+	private Vote vote; // vote that the ballot holds
 	//Printer printer; // printer that the software is connected to
-	String database; // stores persistent data (vote and account info)
+	private String database; // stores persistent data (vote and account info)
 	
 	
 	public Ballot(String filename, Vote v)

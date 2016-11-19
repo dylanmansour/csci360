@@ -4,29 +4,32 @@
  */
 import java.util.Scanner;
 import java.io.BufferedWriter;
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
-import java.io.UnsupportedEncodingException;
 import java.io.Writer;
 
 
-public final class ManageUsers {
+public class ManageUsers {
 	
-	private static Database database; // stores persistent data (vote and account info)
+	private String database; // stores persistent data (vote and account info)
+	
+	public ManageUsers(String filename)
+	{
+		this.database = filename;
+	}
 	
 	/**
 	* Checks if the specified name and password match the name and password
 	* of a profile stored in the database.
-	 * @throws FileNotFoundException 
+	* @throws FileNotFoundException 
 	*/
-	public static VoterProfile login(String username, String password) throws FileNotFoundException
+	public VoterProfile login(String username, String password) throws FileNotFoundException
 	{
 		VoterProfile profile = null;
-		Scanner scanner = new Scanner(new FileInputStream("users.txt"));
+		Scanner scanner = new Scanner(new FileInputStream(this.database));
 		String str = null;
 
 		while(scanner.hasNextLine())
@@ -46,12 +49,12 @@ public final class ManageUsers {
 	
 	/**
 	* Generates and returns a unique ID to be used to mark a profile.
-	 * @throws FileNotFoundException 
+	* @throws FileNotFoundException 
 	*/
-	public static String generateID() throws FileNotFoundException
+	public String generateID() throws FileNotFoundException
 	{
 		String uniqID = null;
-		Scanner scanner = new Scanner(new FileInputStream("user.txt"));
+		Scanner scanner = new Scanner(new FileInputStream(this.database));
 		
 		int uniqIDnum = 1;
 
@@ -66,30 +69,60 @@ public final class ManageUsers {
 		return uniqID;
 	}
 	
-	public static boolean verifyRegistration(VoterProfile profile)
+	/**
+	 * Makes sure that the profile can be registered.
+	 * @param profile
+	 * @return
+	 * @throws FileNotFoundException
+	 */
+	public boolean verifyRegistration(VoterProfile profile) throws FileNotFoundException
 	{
-		/*Scanner scanner = new Scanner(new FileInputStream("users.txt"));
+		boolean canRegister = true;
+		Scanner scanner = new Scanner(new FileInputStream("users.txt"));
 		String str = null;
+		
+		//Check if the license ID has already been used (prevents duplicate accounts)
 		while(scanner.hasNextLine())
 		{
 			str = scanner.nextLine();
 			String[] fields = str.split("[;]");
-			if (fields[0].equals(profile.getUsername()) && fields[1].equals(profile.getPassword()) && fields[3].equals(profile.getAge()) && fields[4].equals(profile.getLicenseID()))
+			if (fields[4].equals(profile.getLicenseID()))
 			{
-				profile.setRegistered(true);
-			   return true;
+				canRegister = false;
 			}
 		}
+		
+		//Check if age requirement is met (prevents underaged voters)
+		if (profile.getAge() < 18)
+		{
+			canRegister = false;
+		}
+		
+		//Check if there are no spaces in the information
+		if (
+				profile.getUsername().contains(" ") ||
+				profile.getPassword().contains(" ") ||
+				profile.getLicenseID().contains(" "))
+		{
+			canRegister = false;
+		}
+		
+		
 		scanner.close();
-		profile.setRegistered(false);
-		return false;*/
-		return (profile.isRegistered());
+		
+		return (canRegister);
 	}
 	
-	public static void registerAccount(VoterProfile profile) throws IOException
+	
+	/**
+	 * Officially registers the profile by storing it.
+	 * @param profile
+	 * @throws IOException
+	 */
+	public void registerAccount(VoterProfile profile) throws IOException
 	{
 		profile.setVoterID(generateID());
-		Writer writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream("users.txt"),"utf-8"));
+		Writer writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(this.database),"utf-8"));
 		writer.append(profile.getUsername() + ";" + profile.getPassword() + ";" +
 							profile.getVoterID() + ";" + profile.getAge() +
 							profile.getLicenseID() + "\n");
