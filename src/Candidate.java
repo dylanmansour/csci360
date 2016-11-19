@@ -9,21 +9,21 @@ public class Candidate {
 	
 	public String getName()
 	{
-		return name;
+		return name; //gets the name of the candidate 
 	}
 	
 	public String getParty()
 	{
-		return party;
+		return party; //get the party of the candidate
 	}
 	
 	public void setName(String name)
 	{
-		this.name = name;
+		this.name = name; //sets the name of the candidate
 	}
 	
 	public void setParty(String party)
 	{
-		this.party = party;
+		this.party = party; //sets the party of the candidate 
 	}
 }
