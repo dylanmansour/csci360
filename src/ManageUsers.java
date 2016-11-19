@@ -40,8 +40,8 @@ public class ManageUsers {
 			String[] fields = str.split(";");
 			if (fields[0].equals(username) && fields[1].equals(password)) //the login information is correct
 			{
-				profile = new VoterProfile(fields[0], fields[1], Integer.parseInt(fields[3]), fields[4]); //
-				profile.setVoterID(fields[2]);
+				profile = new VoterProfile(fields[0], fields[1], Integer.parseInt(fields[3]), fields[4]); //stores info in a new voter profile
+				profile.setVoterID(fields[2]); //voterId is assigned
 				break;
 			}
 		}
@@ -63,12 +63,12 @@ public class ManageUsers {
 		while (scanner.hasNextLine())
 		{
 		  scanner.nextLine();
-		  uniqIDnum++;
+		  uniqIDnum++; //adds 1 to each new ID to make it different
 		}
 		
-		uniqID = Integer.toString(uniqIDnum);
+		uniqID = Integer.toString(uniqIDnum); //converts ID to a string
 		scanner.close();
-		return uniqID;
+		return uniqID; 
 	}
 	
 	/**
@@ -88,7 +88,7 @@ public class ManageUsers {
 		{
 			str = scanner.nextLine();
 			String[] fields = str.split("[;]");
-			if (fields[4].equals(profile.getLicenseID()))
+			if (fields[4].equals(profile.getLicenseID())) //If the license ID exists for a user, the person cannot register
 			{
 				canRegister = false;
 			}
@@ -131,6 +131,7 @@ public class ManageUsers {
         {
             str = scanner.nextLine();
             String[] fields = str.split(";");
+	//check user information to make sure it matches
             if (fields[0].equals(profile.getUsername()) && fields[1].equals(profile.getPassword()) && fields[3].equals(profile.getAge()) && fields[4].equals(profile.getLicenseID()))
             {
                 //User exists, exit the method
@@ -146,11 +147,11 @@ public class ManageUsers {
         }
         scanner.close();
         
-        profile.setVoterID(generateID());
+        profile.setVoterID(generateID()); //get the new ID for the profile
         try
         {
             FileWriter fw = new FileWriter("users.txt",true);
-            fw.write(profile.getUsername() + ";" + profile.getPassword() + ";" + profile.getVoterID() + ";" + profile.getAge() + "\n");
+            fw.write(profile.getUsername() + ";" + profile.getPassword() + ";" + profile.getVoterID() + ";" + profile.getAge() + "\n"); //store user and user info into the file
             fw.close();
         }
         catch(IOException ioe)
