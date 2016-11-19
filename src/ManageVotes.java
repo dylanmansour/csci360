@@ -36,7 +36,7 @@ public final class ManageVotes {
 			String[] fields = str.split(";");
 			if (fields[0].equals(name))
 			{
-				voteCount = voteCount + 1;
+				voteCount = voteCount + 1; //if there is a candidate name, vote increments by one 
 			}
 		}
 		scanner.close();
