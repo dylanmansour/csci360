@@ -28,17 +28,18 @@ public class ManageUsers {
 	*/
 	public VoterProfile login(String username, String password) throws FileNotFoundException
 	{
-		VoterProfile profile = null;
-		Scanner scanner = new Scanner(new FileInputStream(this.database));
-		String str = null;
+		VoterProfile profile = null; //no starting value for profile
+		Scanner scanner = new Scanner(new FileInputStream(this.database)); //scanner reads file
+		String str = null; 
 
+		
 		while(scanner.hasNextLine())
 		{
 			str = scanner.nextLine();
 			String[] fields = str.split(";");
-			if (fields[0].equals(username) && fields[1].equals(password))
+			if (fields[0].equals(username) && fields[1].equals(password)) //the login information is correct
 			{
-				profile = new VoterProfile(fields[0], fields[1], Integer.parseInt(fields[3]), fields[4]);
+				profile = new VoterProfile(fields[0], fields[1], Integer.parseInt(fields[3]), fields[4]); //
 				profile.setVoterID(fields[2]);
 				break;
 			}
