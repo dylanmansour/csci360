@@ -11,7 +11,7 @@ public class Vote {
 	 */
 	public String getName()
 	{
-	   return candidate;
+	   return candidate; //returns the candidate on the vote
 	}
 	
 	/**
@@ -19,7 +19,7 @@ public class Vote {
 	 */
 	public String getID()
 	{
-	   return voterID;
+	   return voterID; //returns the voter ID on the vote
 	}
 	
 	/**
@@ -27,7 +27,7 @@ public class Vote {
 	 */
 	public void setName(String name)
 	{
-	   this.candidate = name;
+	   this.candidate = name; //sets candidate's name for the vote
 	}
 	
 	/**
@@ -35,6 +35,6 @@ public class Vote {
 	 */
 	public void setID(String ID)
 	{
-	   this.voterID = ID;
+	   this.voterID = ID; //sets voter's ID for the vote
 	}
 }
