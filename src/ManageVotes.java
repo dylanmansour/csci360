@@ -24,7 +24,7 @@ public final class ManageVotes {
 	 */
 	public static int countVotes(Candidate candidate) throws FileNotFoundException
 	{
-		String name = candidate.getName();
+		String name = candidate.getName(); //get candidates name
 		int voteCount = 0;
 		
 		Scanner scanner = new Scanner(new FileInputStream(database));
@@ -36,11 +36,11 @@ public final class ManageVotes {
 			String[] fields = str.split(";");
 			if (fields[0].equals(name))
 			{
-				voteCount = voteCount + 1; //if there is a candidate name, vote increments by one 
+				voteCount = voteCount + 1; //if the first item on the line equals the candidates name, vote incremements by one for that candidate
 			}
 		}
 		scanner.close();
 		
-		return voteCount;
+		return voteCount; //final count for candidate returned. 
 	}
 }
