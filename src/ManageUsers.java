@@ -121,15 +121,100 @@ public class ManageUsers {
 	 * @throws IOException
 	 */
 	public void registerAccount(VoterProfile profile) throws IOException
+	/**
+	 * Makes sure that the profile can be registered.
+	 * @param profile
+	 * @return
+	 * @throws FileNotFoundException
+	 */
+	public boolean verifyRegistration(VoterProfile profile) throws FileNotFoundException
 	{
-		profile.setVoterID(generateID());
-		Writer writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(this.database),"utf-8"));
-		writer.append(profile.getUsername() + ";" + profile.getPassword() + ";" +
-							profile.getVoterID() + ";" + profile.getAge() + ";" +
-							profile.getLicenseID() + "\n");
+		boolean canRegister = true;
+		Scanner scanner = new Scanner(new FileInputStream(this.database));
+		String str = null;
 		
-		profile.setRegistered(true); //The registration was successful.
+		//Check if the license ID has already been used (prevents duplicate accounts)
+		while(scanner.hasNextLine())
+		{
+			str = scanner.nextLine();
+			String[] fields = str.split("[;]");
+			if (fields[4].equals(profile.getLicenseID()))
+			{
+				canRegister = false;
+			}
+		}
 		
-		writer.close();
+		//Check if age requirement is met (prevents underaged voters)
+		if (profile.getAge() < 18)
+		{
+			canRegister = false;
+		}
+		
+		//Check if there are no spaces in the information
+		if (
+				profile.getUsername().contains(" ") ||
+				profile.getPassword().contains(" ") ||
+				profile.getLicenseID().contains(" "))
+		{
+			canRegister = false;
+		}
+		
+		
+		scanner.close();
+		
+		return (canRegister);
 	}
+	
+	
+	/**
+	 * Officially registers the profile by storing it.
+	 * @param profile
+	 * @throws IOException
+	 */
+	public static boolean registerAccount(VoterProfile profile)
+    {
+        Scanner scanner = new Scanner(new FileInputStream("users.txt"));
+        String str = null;
+
+        while(scanner.hasNextLine())
+        {
+            str = scanner.nextLine();
+            String[] fields = str.split(";");
+            if (fields[0].equals(profile.getUsername()) && fields[1].equals(profile.getPassword()) && fields[3].equals(profile.getAge()) && fields[4].equals(profile.getLicenseID()))
+            {
+                //User exists, exit the method
+                scanner.close();
+                return false;
+            }
+            if(Integer.parseInt(fields[3]) < 18)
+            {
+                //User is too young, exit the method
+                scanner.close();
+                return false;
+            }
+        }
+        scanner.close();
+        
+        profile.setVoterID(generateID());
+        /*Writer writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream("users.txt"),"utf-8"))
+        try{
+            writer.append(profile.getUserName() + ";" + profile.getPassword() + ";" + profile.getVoterID() + ";" + profile.getAge() + "\n");
+           }
+        
+        */
+        try
+        {
+            FileWriter fw = new FileWriter("users.txt",true);
+            fw.write(profile.getUserName() + ";" + profile.getPassword() + ";" + profile.getVoterID() + ";" + profile.getAge() + "\n");
+            fw.close();
+        }
+        catch(IOException ioe)
+        {
+            System.err.println("IOException: " + ioe.getMessage());
+        }
+        
+        profile.setRegistered(true); //The registration was successful.
+        return true;
+    }
+
 }
