@@ -78,7 +78,7 @@ public class ManageUsers {
 	public boolean verifyRegistration(VoterProfile profile) throws FileNotFoundException
 	{
 		boolean canRegister = true;
-		Scanner scanner = new Scanner(new FileInputStream("users.txt"));
+		Scanner scanner = new Scanner(new FileInputStream(this.database));
 		String str = null;
 		
 		//Check if the license ID has already been used (prevents duplicate accounts)
@@ -124,7 +124,7 @@ public class ManageUsers {
 		profile.setVoterID(generateID());
 		Writer writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(this.database),"utf-8"));
 		writer.append(profile.getUsername() + ";" + profile.getPassword() + ";" +
-							profile.getVoterID() + ";" + profile.getAge() +
+							profile.getVoterID() + ";" + profile.getAge() + ";" +
 							profile.getLicenseID() + "\n");
 		
 		profile.setRegistered(true); //The registration was successful.

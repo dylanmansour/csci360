@@ -198,7 +198,7 @@ public class Controller {
 			
 			for (int i = 0; i < candidates.size(); i++)
 			{
-				if (input.equals(candidates.get(i)))
+				if (input.equals(candidates.get(i).getName()))
 				{
 					voteIndex = i;
 					break;
