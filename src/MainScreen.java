@@ -11,11 +11,11 @@ public final class MainScreen
 	public static Component createComponents(Controller controller)
 	{
       JButton buttonLogin = new JButton("Login");
-      buttonLogin.setActionCommand("login");
+      buttonLogin.setActionCommand("switch to login");
       buttonLogin.addActionListener(controller);
       
       JButton buttonRegister = new JButton("Register");
-      buttonRegister.setActionCommand("register");
+      buttonRegister.setActionCommand("switch to register");
       buttonRegister.addActionListener(controller);
       
       JPanel pane = new JPanel(new GridLayout(0, 1));

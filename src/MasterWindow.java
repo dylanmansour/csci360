@@ -1,6 +1,6 @@
-import java.awt.BorderLayout;
-import java.awt.Component;
-import javax.swing.JFrame;
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
 
 /**
  * Justin Priester, Dylan Mansour
@@ -10,10 +10,12 @@ import javax.swing.JFrame;
 public class MasterWindow
 {
 	Controller controller; //The controller to send signals to
+	JFrame frame;
 	
 	public MasterWindow(Controller controller)
 	{
 		this.controller = controller;
+		createWindow();
 	}
 	
 	private void createAndShowGUI()
@@ -22,7 +24,7 @@ public class MasterWindow
       JFrame.setDefaultLookAndFeelDecorated(true);
       
       //Create and set up the window.
-      JFrame frame = new JFrame("Main Menu");
+      frame = new JFrame("Voting Software");
       frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
       
       Component mainScreen = MainScreen.createComponents(controller);
@@ -33,7 +35,7 @@ public class MasterWindow
       frame.setVisible(true);
 	}
 	
-	public void createWindow()
+	private void createWindow()
 	{
 		//Schedule a job for the event-dispatching thread:
       //creating and showing this application's GUI.
@@ -44,5 +46,33 @@ public class MasterWindow
               createAndShowGUI();
           }
       });
+	}
+	
+	public void changeScreen(String menuName)
+	{	
+		Component screen;
+		Container pane = frame.getContentPane();
+		
+		if (menuName.equals("main"))
+		{
+			screen = MainScreen.createComponents(controller);
+			pane.removeAll();
+			pane.add(screen, BorderLayout.CENTER);
+		}
+		else if (menuName.equals("register"))
+		{
+			screen = RegisterScreen.createComponents(controller);
+			pane.removeAll();
+			pane.add(screen, BorderLayout.CENTER);
+		}
+		else if (menuName.equals("login"))
+		{
+			screen = LoginScreen.createComponents(controller);
+			pane.removeAll();
+			pane.add(screen, BorderLayout.CENTER);
+		}
+		
+		frame.pack();
+      frame.setVisible(true);
 	}
 }

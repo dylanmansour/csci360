@@ -11,14 +11,18 @@ import java.awt.event.*;
  * responding to input from the view classes.
  */
 public class Controller implements ActionListener {
+	MasterWindow window;
+	ManageUsers manageUsers; //Extended methods for managing user profiles
+	
+	public Controller()
+	{
+		window = new MasterWindow(this);
+		ManageUsers manageUsers = new ManageUsers("users.txt");
+	}
+	
 	public static void main(String[] args) throws IOException
 	{
 		Controller controller = new Controller();
-		ManageUsers manageUsers = new ManageUsers("users.txt"); //Extended methods for managing user profiles
-		
-		MasterWindow window = new MasterWindow(controller);
-		
-		window.createWindow();
 	}
 	
 	/**
@@ -266,13 +270,19 @@ public class Controller implements ActionListener {
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		if (e.getActionCommand().equals("login"))
+		String ac = e.getActionCommand();
+		
+		if (ac.equals("switch to login"))
 		{
-			System.out.println("You clicked the login button!");
+			window.changeScreen("login");
 		}
-		else if (e.getActionCommand().equals("register"))
+		else if (ac.equals("switch to register"))
 		{
-			System.out.println("You clicked the register button!");
+			window.changeScreen("register");
+		}
+		else if (ac.equals("switch to main"))
+		{
+			window.changeScreen("main");
 		}
 	}
 }
