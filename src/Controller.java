@@ -1,41 +1,24 @@
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
 
 /**
  * Justin Priester, Dylan Mansour
  * The primary controller of the voting software. It is responsible for
  * responding to input from the view classes.
  */
-public class Controller {
+public class Controller implements ActionListener {
 	public static void main(String[] args) throws IOException
 	{
+		Controller controller = new Controller();
 		ManageUsers manageUsers = new ManageUsers("users.txt"); //Extended methods for managing user profiles
 		
-		Scanner scanner = new Scanner(System.in); //hold, will read user input
+		MasterWindow window = new MasterWindow(controller);
 		
-		String nextMenu = "mainMenu"; //the next menu to go to after the current one terminates
-		
-		//Start the console menu
-		while (!nextMenu.equals("exit"))
-		{
-			switch (nextMenu)
-			{
-			case "mainMenu":
-				nextMenu = simulateMainMenu(scanner);
-				break;
-				
-			case "registerMenu":
-				nextMenu = simulateRegisterMenu(scanner, manageUsers);
-				break;
-				
-			case "loginMenu":
-				nextMenu = simulateLoginMenu(scanner, manageUsers);
-				break;
-			}
-		}
-		
-		scanner.close();
+		window.createWindow();
 	}
 	
 	/**
@@ -279,5 +262,17 @@ public class Controller {
 		}
 		
 		return nextMenu;
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		if (e.getActionCommand().equals("login"))
+		{
+			System.out.println("You clicked the login button!");
+		}
+		else if (e.getActionCommand().equals("register"))
+		{
+			System.out.println("You clicked the register button!");
+		}
 	}
 }

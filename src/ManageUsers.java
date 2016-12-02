@@ -3,13 +3,10 @@
  * A secondary controller that contains methods for managing profile information.
  */
 import java.util.Scanner;
-import java.io.BufferedWriter;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.OutputStreamWriter;
 import java.io.Writer;
 
 
@@ -150,7 +147,7 @@ public class ManageUsers {
         try
         {
             FileWriter fw = new FileWriter("users.txt",true);
-            fw.write(profile.getUsername() + ";" + profile.getPassword() + ";" + profile.getVoterID() + ";" + profile.getAge() + "\n");
+            fw.write(profile.getUsername() + ";" + profile.getPassword() + ";" + profile.getVoterID() + ";" + profile.getAge() + ";" + profile.getLicenseID() + "\n");
             fw.close();
         }
         catch(IOException ioe)
