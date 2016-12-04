@@ -13,10 +13,14 @@ import java.io.Writer;
 public class ManageUsers {
 	
 	private String database; // stores persistent data (vote and account info)
-	
+	private CryptoUtil security;
+    private String key;
+    
 	public ManageUsers(String filename)
 	{
 		this.database = filename;
+		this.key = "1234567890123456";
+		this.security = new CryptoUtil();
 	}
 	
 	/**
@@ -34,11 +38,12 @@ public class ManageUsers {
 		while(scanner.hasNextLine())
 		{
 			str = scanner.nextLine();
-			String[] fields = str.split(";");
-			if (fields[0].equals(username) && fields[1].equals(password)) //the login information is correct
+			String[] fields = str.split("\t");
+			if (this.security.decrypt(fields[0],this.key).equals(username) && this.security.decrypt(fields[1],this.key).equals(password)) //the login information is correct
 			{
-				profile = new VoterProfile(fields[0], fields[1], Integer.parseInt(fields[3]), fields[4]); //
+				profile = new VoterProfile(this.security.decrypt(fields[0],this.key), this.security.decrypt(fields[1],this.key), Integer.parseInt(fields[3]), this.security.decrypt(fields[4],this.key)); //
 				profile.setVoterID(fields[2]);
+				profile.setRegistered(true);
 				break;
 			}
 		}
@@ -84,8 +89,9 @@ public class ManageUsers {
 		while(scanner.hasNextLine())
 		{
 			str = scanner.nextLine();
-			String[] fields = str.split("[;]");
-			if (fields[4].equals(profile.getLicenseID()))
+			System.out.println(str);
+			String[] fields = str.split("\t");
+			if (this.security.decrypt(fields[4],this.key).equals(profile.getLicenseID()))
 			{
 				canRegister = false;
 			}
@@ -122,13 +128,13 @@ public class ManageUsers {
 	public boolean registerAccount(VoterProfile profile) throws FileNotFoundException
     {
         Scanner scanner = new Scanner(new FileInputStream("users.txt"));
-        String str = null;
+        String str = "";
 
         while(scanner.hasNextLine())
         {
             str = scanner.nextLine();
-            String[] fields = str.split(";");
-            if (fields[0].equals(profile.getUsername()) && fields[1].equals(profile.getPassword()) && fields[3].equals(profile.getAge()) && fields[4].equals(profile.getLicenseID()))
+            String[] fields = str.split("\t");
+            if (this.security.decrypt(fields[0],this.key).equals(profile.getUsername()) && this.security.decrypt(fields[1],this.key).equals(profile.getPassword()) && fields[3].equals(Integer.toString(profile.getAge())) && this.security.decrypt(fields[4],this.key).equals(profile.getLicenseID()))
             {
                 //User exists, exit the method
                 scanner.close();
@@ -147,7 +153,7 @@ public class ManageUsers {
         try
         {
             FileWriter fw = new FileWriter("users.txt",true);
-            fw.write(profile.getUsername() + ";" + profile.getPassword() + ";" + profile.getVoterID() + ";" + profile.getAge() + ";" + profile.getLicenseID() + "\n");
+            fw.write(this.security.encrypt(profile.getUsername(),this.key) + "\t" + this.security.encrypt(profile.getPassword(),this.key) + "\t" + profile.getVoterID() + "\t" + profile.getAge() + "\t" + this.security.encrypt(profile.getLicenseID(),this.key) + System.lineSeparator());
             fw.close();
         }
         catch(IOException ioe)
