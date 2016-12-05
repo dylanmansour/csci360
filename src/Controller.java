@@ -1,3 +1,4 @@
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -10,14 +11,17 @@ import java.awt.event.*;
  * The primary controller of the voting software. It is responsible for
  * responding to input from the view classes.
  */
-public class Controller implements ActionListener {
+public class Controller implements ActionListener
+{
 	MasterWindow window;
 	ManageUsers manageUsers; //Extended methods for managing user profiles
+	VoterProfile profile;
 	
 	public Controller()
 	{
 		window = new MasterWindow(this);
-		ManageUsers manageUsers = new ManageUsers("users.txt");
+		manageUsers = new ManageUsers("users.txt");
+		profile = blankProfile();
 	}
 	
 	public static void main(String[] args) throws IOException
@@ -25,264 +29,173 @@ public class Controller implements ActionListener {
 		Controller controller = new Controller();
 	}
 	
-	/**
-	 * Simulates a main menu in the console.
-	 * @param scanner
-	 * @return
-	 */
-	private static String simulateMainMenu(Scanner scanner)
+	private VoterProfile blankProfile()
 	{
-		String nextMenu = ""; //to contain information on which menu to go to after this one ends
-		
-		System.out.println("Welcome to the bestest voting system evar!");
-		System.out.println("Type 'register' if you want to register,\n" +
-								"or type 'login' if you already have an account.");
-		System.out.println("Type 'exit' to close the software.");
-		
-		String input = scanner.nextLine();
-		
-		if (input.equals("register"))
-		{
-			nextMenu = "registerMenu";
-		}
-		else if (input.equals("login"))
-		{
-			nextMenu = "loginMenu";
-		}
-		else if (input.equals("exit"))
-		{
-			nextMenu = "exit";
-		}
-		else
-		{
-			System.out.println("You submitted invalid information!");
-			nextMenu = "mainMenu";
-		}
-		
-		return nextMenu;
-	}
-	
-	/**
-	 * Simulates a register menu in the console.
-	 * @param scanner
-	 * @param manageUsers
-	 * @return the next menu to go to
-	 * @throws IOException
-	 */
-	private static String simulateRegisterMenu(Scanner scanner, ManageUsers manageUsers) throws IOException
-	{
-		String nextMenu = ""; //to contain information on which menu to go to after this one ends
-		VoterProfile newProfile; //to hold information of the new profile
-		
-		System.out.println("Let's get some information from you.");
-		
-		//Registration
-		System.out.println("Remember that none of your information should have spaces.");
-		System.out.println("Also, you have to be 18 or older in order to vote.");
-		System.out.println("And it will fail if you already have an account.regi");
-		System.out.println("Type 'exit' at the start to back out of registration.");
-		
-		//Ask for username
-		System.out.print("Username (for logging in): ");
-		String username = scanner.nextLine();
-		if (username.equals("exit"))
-		{
-			return "mainMenu";
-		}
-		
-		//Ask for password
-		System.out.print("Password (for logging in): ");
-		String password = scanner.nextLine();
-		
-		//Ask for age
-		System.out.print("Age: ");
-		int age = scanner.nextInt();
-		scanner.nextLine();
-		
-		//Ask for license
-		System.out.print("Driver's License ID: ");
-		String licenseID = scanner.nextLine();
-		
-		newProfile = new VoterProfile(username, password, age, licenseID);
-		
-		if (manageUsers.verifyRegistration(newProfile))
-		{
-			manageUsers.registerAccount(newProfile);
-			
-			if (newProfile.isRegistered())
-			{
-				System.out.println("Your account has been registered!");
-				System.out.println("We totally won't do anything evil with this information! =D");
-				
-				nextMenu = "loginMenu";
-			}
-			else
-			{
-				System.out.println("For some reason we couldn't register your account.");
-			}
-		}
-		else
-		{
-			System.out.println("Uh oh! You submitted invalid information!");
-			nextMenu = "registerMenu";
-		}
-		
-		return nextMenu;
-	}
-	
-	/**
-	 * Simulates a main menu in the console.
-	 * @param scanner
-	 * @param manageUsers
-	 * @return the next menu to go to
-	 * @throws IOException
-	 */
-	private static String simulateLoginMenu(Scanner scanner, ManageUsers manageUsers) throws IOException
-	{
-		String nextMenu = ""; //to contain information on which menu to go to after this one ends
-		
-		System.out.println("Let's log in!");
-		System.out.println("Type 'exit' to exit out.");
-		
-		//Ask for username
-		System.out.print("Username: ");
-		String username = scanner.nextLine();
-		if (username.equals("exit"))
-		{
-			return "mainMenu";
-		}
-		
-		//Ask for password
-		System.out.print("Password: ");
-		String password = scanner.nextLine();
-		if (password.equals("exit"))
-		{
-			return "mainMenu";
-		}
-		
-		VoterProfile profile = manageUsers.login(username, password);
-		
-		if (profile != null)
-		{
-			while (nextMenu != "logout")
-			{
-				nextMenu = simulateVoteMenu(scanner, profile);
-			}
-			
-			nextMenu = "mainMenu";
-		}
-		else
-		{
-			System.out.println("The specified account does not exist.");
-			nextMenu = "loginMenu";
-		}
-		
-		return nextMenu;
-	}
-	
-	/**
-	 * Simulates a vote menu in the console.
-	 * @param scanner
-	 * @param profile
-	 * @return the next menu to go to
-	 * @throws IOException
-	 */
-	private static String simulateVoteMenu(Scanner scanner, VoterProfile profile) throws IOException
-	{
-		String nextMenu = ""; //to contain information on which menu to go to after this one ends
-		String input;
-		
-		//sample candidate
-		Candidate bob = new Candidate();
-		bob.setName("Bob");
-		bob.setParty("Builder");
-		
-		//sample candidate
-		Candidate bill = new Candidate();
-		bill.setName("Bill");
-		bill.setParty("Science");
-		
-		//Add candidates to list
-		ArrayList<Candidate> candidates = new ArrayList<Candidate>();
-		candidates.add(bob);
-		candidates.add(bill);
-		
-		System.out.println("Below you have the candidates that you can vote for.");
-		System.out.println("Type the name of the  candidate that you want to vote for.");
-		System.out.println("Type 'logout' to log out.");
-		
-		//List candidates
-		for (Candidate candidate : candidates)
-		{
-			System.out.println("Name: " + candidate.getName());
-			System.out.println("Party: " + candidate.getParty());
-			System.out.println("---");
-		}
-		
-		input = scanner.nextLine();
-		
-		if (input.equals("logout"))
-		{
-			nextMenu = "logout";
-		}
-		else
-		{
-			int voteIndex = -1; //hold to be index in the candidate list of who the voter voted for
-			
-			//Obtain the index in the candidate list of who the voter voted for
-			for (int i = 0; i < candidates.size(); i++)
-			{
-				if (input.equals(candidates.get(i).getName()))
-				{
-					voteIndex = i;
-					break;
-				}
-			}
-			
-			if (voteIndex == -1)
-			{
-				System.out.println("Invalid candidate. Let's try again!");
-				nextMenu = "voteMenu";
-			}
-			else
-			{
-				Vote vote = new Vote(); //The voter's vote
-				vote.setName(candidates.get(voteIndex).getName());
-				vote.setID(profile.getVoterID());
-				
-				Ballot ballot = new Ballot("votes.txt", vote); //A ballot that holds the vote
-				
-				if (ballot.voteCasted())
-				{
-					System.out.println("You have already casted a vote. Have a good day!");
-				}
-				else
-				{
-					ballot.castVote();
-					System.out.println("Your vote has been cast. Have a good day!");
-				}
-				nextMenu = "logout";
-			}
-		}
-		
-		return nextMenu;
+		return new VoterProfile("", "", 0, "");
 	}
 
+	public static void infoBox(Component parent, String infoMessage)
+   {
+       JOptionPane.showMessageDialog(parent, infoMessage, "", JOptionPane.INFORMATION_MESSAGE);
+   }
+	
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		String ac = e.getActionCommand();
+		String menuName = window.getMenuName();
 		
-		if (ac.equals("switch to login"))
+		if (menuName.equals("main"))
 		{
-			window.changeScreen("login");
+			if (ac.equals("switch to login"))
+			{
+				window.changeScreen("login");
+			}
+			else if (ac.equals("switch to register"))
+			{
+				window.changeScreen("register");
+			}
 		}
-		else if (ac.equals("switch to register"))
+		else if (menuName.equals("register"))
 		{
-			window.changeScreen("register");
+			if (ac.equals("switch to main"))
+			{
+				window.changeScreen("main");
+				profile = blankProfile();
+			}
+			else if (ac.equals("register account"))
+			{
+				JTextField usernameField = (JTextField) (window.getMenuComponent(0));
+				JTextField passwordField = (JTextField) (window.getMenuComponent(2));
+				JTextField ageField = (JTextField) (window.getMenuComponent(4));
+				JTextField licenseIDField = (JTextField) (window.getMenuComponent(6));
+				
+				profile = new VoterProfile(usernameField.getText(),
+													passwordField.getText(),
+													Integer.parseInt(ageField.getText()),
+													licenseIDField.getText());
+				
+				try
+				{
+					if (manageUsers.verifyRegistration(profile))
+					{
+						manageUsers.registerAccount(profile);
+						
+						if (profile.isRegistered())
+						{
+							infoBox(window.getFrame(), "Your account has been registered!");
+							window.changeScreen("login");
+							profile = blankProfile();
+						}
+						else
+						{
+							infoBox(window.getFrame(), "For some reason we couldn't register your account.");
+						}
+					}
+					else
+					{
+						infoBox(window.getFrame(), "Uh oh! You submitted invalid information!");
+					}
+				}
+				catch (FileNotFoundException e1)
+				{
+					e1.printStackTrace();
+				}
+			}
 		}
-		else if (ac.equals("switch to main"))
+		else if (menuName.equals("login"))
 		{
-			window.changeScreen("main");
+			if (ac.equals("switch to main"))
+			{
+				window.changeScreen("main");
+			}
+			else if (ac.equals("login account"))
+			{
+				JTextField usernameField = (JTextField) (window.getMenuComponent(0));
+				JTextField passwordField = (JTextField) (window.getMenuComponent(2));
+				
+				try
+				{
+					profile = manageUsers.login(usernameField.getText(), passwordField.getText());
+				}
+				catch (FileNotFoundException e1)
+				{
+					e1.printStackTrace();
+				}
+				
+				if (profile != null)
+				{
+					infoBox(window.getFrame(), "Successfully logged in!");
+					window.changeScreen("vote");
+				}
+				else
+				{
+					infoBox(window.getFrame(), "The specified account does not exist.");
+				}
+			}
+		}
+		else if (menuName.equals("vote"))
+		{
+			if (ac.equals("logout"))
+			{
+				window.changeScreen("main");
+				profile = blankProfile();
+			}
+			else if (ac.equals("cast vote"))
+			{
+				JPanel box = (JPanel) window.getMenuComponent(0);
+				final int numButtons = box.getComponentCount() - 1; //we subtract 1 because the first component of the box is a label
+				JRadioButton radioButton;
+				String candidateName = "";
+				
+				for (int i = 0; i < numButtons; i++)
+				{
+					radioButton = (JRadioButton)box.getComponent(i + 1); //we add 1 because the first component of the box is a label
+					
+					if (radioButton.isSelected())
+					{
+						candidateName = radioButton.getActionCommand();
+						break;
+					}
+				}
+				
+				if (candidateName != "")
+				{
+					Vote vote = new Vote(); //The voter's vote
+					vote.setName(candidateName);
+					vote.setID(profile.getVoterID());
+					
+					Ballot ballot = new Ballot("votes.txt", vote); //A ballot that holds the vote
+					
+					try
+					{
+						if (ballot.voteCasted())
+						{
+							infoBox(window.getFrame(), "You have already casted a vote. Have a good day!");
+						}
+						else
+						{
+							ballot.castVote();
+							infoBox(window.getFrame(), "Your vote has been cast. Have a good day!");
+						}
+					}
+					catch (FileNotFoundException e1)
+					{
+						e1.printStackTrace();
+					}
+					catch (IOException e1)
+					{
+						e1.printStackTrace();
+					}
+				}
+				else
+				{
+					infoBox(window.getFrame(), "Attempted to vote for an invalid candidate.");
+				}
+				
+				//log out
+				window.changeScreen("main");
+				profile = blankProfile();
+			}
 		}
 	}
 }

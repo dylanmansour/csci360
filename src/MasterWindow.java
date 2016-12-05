@@ -9,13 +9,25 @@ import java.awt.event.*;
  */
 public class MasterWindow
 {
-	Controller controller; //The controller to send signals to
-	JFrame frame;
+	private Controller controller; //The controller to send signals to
+	private JFrame frame;
+	private String menuName;
 	
 	public MasterWindow(Controller controller)
 	{
 		this.controller = controller;
 		createWindow();
+		menuName = "";
+	}
+	
+	public String getMenuName()
+	{
+		return menuName;
+	}
+	
+	public JFrame getFrame()
+	{
+		return frame;
 	}
 	
 	private void createAndShowGUI()
@@ -29,6 +41,7 @@ public class MasterWindow
       
       Component mainScreen = MainScreen.createComponents(controller);
       frame.getContentPane().add(mainScreen, BorderLayout.CENTER);
+      menuName = "main";
       
       //Display the window.
       frame.pack();
@@ -52,6 +65,7 @@ public class MasterWindow
 	{	
 		Component screen;
 		Container pane = frame.getContentPane();
+		this.menuName = menuName;
 		
 		if (menuName.equals("main"))
 		{
@@ -71,8 +85,21 @@ public class MasterWindow
 			pane.removeAll();
 			pane.add(screen, BorderLayout.CENTER);
 		}
+		else if (menuName.equals("vote"))
+		{
+			screen = VoteScreen.createComponents(controller);
+			pane.removeAll();
+			pane.add(screen, BorderLayout.CENTER);
+		}
 		
 		frame.pack();
       frame.setVisible(true);
+	}
+	
+	public Component getMenuComponent(int n)
+	{
+		JPanel panel = (JPanel)frame.getContentPane().getComponent(0);
+		
+		return panel.getComponent(n);
 	}
 }

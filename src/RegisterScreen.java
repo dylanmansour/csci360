@@ -30,13 +30,13 @@ public final class RegisterScreen {
       buttonCancel.addActionListener(controller);
       
       JPanel pane = new JPanel(new GridLayout(0, 2));
-      pane.add(username);
+      pane.add(username); //0th component
       pane.add(usernameLabel);
-      pane.add(password);
+      pane.add(password); //2nd component
       pane.add(passwordLabel);
-      pane.add(age);
+      pane.add(age); //4th component
       pane.add(ageLabel);
-      pane.add(licenseID);
+      pane.add(licenseID); //6th component
       pane.add(licenseIDLabel);
       pane.add(buttonCancel);
       pane.add(buttonRegister);
